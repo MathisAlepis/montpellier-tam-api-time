@@ -105,3 +105,5 @@ function timeConvert(n) {
 	if (rhours != 0) return rhours + " heure(s) " + rminutes + " minutes";
 	else return rminutes + " minutes";
 }
+
+module.exports = app;
