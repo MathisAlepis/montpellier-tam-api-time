@@ -106,4 +106,4 @@ function timeConvert(n) {
 	else return rminutes + " minutes";
 }
 
-module.exports = app;
+export { app }
