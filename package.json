@@ -1,23 +1,19 @@
 {
-  "name": "montpellier-tam-api",
+  "name": "tam-api-time",
   "version": "1.0.0",
-  "description": "",
-  "main": "api/query.js",
+  "description": "see time before next tram of Montpellier",
+  "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/aslafy-z/montpellier-tam-api.git"
   },
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/aslafy-z/montpellier-tam-api/issues"
-  },
-  "homepage": "https://github.com/aslafy-z/montpellier-tam-api#readme",
   "dependencies": {
-    "csv-parse": "^4.12.0",
-    "node-fetch": "^2.6.1"
-  }
+    "csv-parse": "^5.3.0",
+    "express": "^4.18.1",
+    "node-fetch": "^3.2.9",
+    "nodemon": "^2.0.19"
+  },
+  "type": "module"
 }
