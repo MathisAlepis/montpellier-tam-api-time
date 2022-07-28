@@ -7,6 +7,9 @@
 	  }
 	],
 	"routes": [
-		{ "src": "/", "status": 302, "headers": { "Location": "https://github.com/MathisAlepis/montpellier-tam-api-time" }}
+		{
+		  "src": "/(.*)",
+		  "dest": "index.js"
+		}
 	  ]
   }
