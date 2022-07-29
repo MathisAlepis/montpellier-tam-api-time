@@ -84,7 +84,7 @@ function addHours(numOfHours, date = new Date()) {
   }
 
 const parseCourseTam = async (result) => {
-let test = []
+let testtt = []
 	let res = {}
 	let time = []
 	// HOTFIX : ajoute 2 heures car serveur en GMT 0
