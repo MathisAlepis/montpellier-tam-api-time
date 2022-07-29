@@ -2,9 +2,9 @@
 
 ## Example
 
-Querying https://???????/api/query?stop_name=ANTIGONE&trip_headsign=MOSSON will retrieve all time for courses from ANTIGONE to MOSSON.
+Querying https://montpellier-tam-api-time.vercel.app/api/query?stop_name=ANTIGONE&trip_headsign=MOSSON will retrieve all time for courses from ANTIGONE to MOSSON.
 
-Querying https://???????/api/ will retrieve all available courses you can do
+Querying https://montpellier-tam-api-time.vercel.app/api/ will retrieve all available courses you can do
 
 
 ## Available fields
