@@ -26,7 +26,7 @@ app.get('/api/', async (req, res) => {
 		success: true,
 		message: "that is all course you can do",
 		result: result,
-		last_updated: (new Date).toTimeString().split(' ')[0]
+		last_updated: (new Date).toLocaleString("fr-FR", {timeZone: "Europe/Paris"}).split(',')[1]
 	})
 
 })
