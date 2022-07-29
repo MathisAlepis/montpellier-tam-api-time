@@ -47,7 +47,7 @@ app.get('/api/query/', async (req, res) => {
 	res.json({
 		success: true,
 		result: parsedResult,
-		last_updated: (new Date).toTimeString().split(' ')[0]
+		last_updated: (new Date).toLocaleString("fr-FR", {timeZone: "Europe/Paris"}).split(',')[1]
 	})
 
 })
@@ -77,8 +77,10 @@ const fetchAndFilterForTram = async (filters) => {
 
 const parseCourseTam = async (result) => {
 	let res = {}
+	let test = []
 	let time = []
-	let now = new Date()
+	let now = new Date
+	now.toLocaleString("fr-FR", {timeZone: "Europe/Paris"})
 	if (result.length === 0) time.push("Indisponible")
 	else for (const course of result) {
 		let fullDateOfTimeCourse = new Date();
@@ -86,8 +88,13 @@ const parseCourseTam = async (result) => {
 		fullDateOfTimeCourse.setHours(+hours);
 		fullDateOfTimeCourse.setMinutes(minutes);
 		fullDateOfTimeCourse.setSeconds(seconds);
+		fullDateOfTimeCourse.toLocaleString("fr-FR", {timeZone: "Europe/Paris"})
+
+		test.push(fullDateOfTimeCourse)
+		test.push(now)
+
 		if (fullDateOfTimeCourse > now) {
-			var diff = Math.abs(now - new Date(fullDateOfTimeCourse));
+			var diff = Math.abs(now - fullDateOfTimeCourse);
 			const min = (Math.floor((diff / 1000) / 60))
 			if (min <= 1) time.push("Proche !!")
 			else time.push(min)
@@ -99,6 +106,7 @@ const parseCourseTam = async (result) => {
 	res['direction'] = result[0].trip_headsign
 	res['icon'] = "mdi:numeric-3-box"
 	res['color'] = "rgba(203, 211, 0, 255)"
+	res['test'] = test
 	return (res)
 }
 
