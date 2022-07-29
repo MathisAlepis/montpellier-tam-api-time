@@ -93,23 +93,25 @@ const parseCourseTam = async (result) => {
 
 	if (result.length === 0) time.push("Indisponiblee")
 
-	else for (const course of result) {
-		let fullDateOfTimeCourse = new Date();
-		let [hours, minutes, seconds] = course.departure_time.split(':');
-		fullDateOfTimeCourse.setHours(+hours);
-		fullDateOfTimeCourse.setMinutes(minutes);
-		fullDateOfTimeCourse.setSeconds(seconds);
-		testtt.push(fullDateOfTimeCourse)
-		testtt.push(now)
+	else {
+		for (const course of result) {
+			let fullDateOfTimeCourse = new Date();
+			let [hours, minutes, seconds] = course.departure_time.split(':');
+			fullDateOfTimeCourse.setHours(+hours);
+			fullDateOfTimeCourse.setMinutes(minutes);
+			fullDateOfTimeCourse.setSeconds(seconds);
+			testtt.push(fullDateOfTimeCourse)
+			testtt.push(now)
 
-		if (fullDateOfTimeCourse > now) {
-			var diff = Math.abs(now - fullDateOfTimeCourse);
-			const min = (Math.floor((diff / 1000) / 60))
-			if (min <= 1) time.push("Proche !!")
-			else time.push(min)
+			if (fullDateOfTimeCourse > now) {
+				var diff = Math.abs(now - fullDateOfTimeCourse);
+				const min = (Math.floor((diff / 1000) / 60))
+				if (min <= 1) time.push("Proche !!")
+				else time.push(min)
+			}
 		}
+		if (time.length === 0) time.push("Indisponiblez")
 	}
-	if (time.length === 0) time.push("Indisponible")
 	res['time'] = time
 	res['stop'] = result[0].stop_name
 	res['direction'] = result[0].trip_headsign
