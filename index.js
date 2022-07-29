@@ -76,9 +76,10 @@ const fetchAndFilterForTram = async (filters) => {
 }
 
 const parseCourseTam = async (result) => {
-	let res = []
+	let res = {}
+	let time = []
 	let now = new Date()
-	if (result.length === 0) res.push("Indisponible")
+	if (result.length === 0) time.push("Indisponible")
 	else for (const course of result) {
 		let fullDateOfTimeCourse = new Date();
 		let [hours, minutes, seconds] = course.departure_time.split(':');
@@ -88,22 +89,17 @@ const parseCourseTam = async (result) => {
 		if (fullDateOfTimeCourse > now) {
 			var diff = Math.abs(now - new Date(fullDateOfTimeCourse));
 			const min = (Math.floor((diff / 1000) / 60))
-			if (min <= 1) res.push("Proche !!")
-			else res.push(timeConvert(min))
+			if (min <= 1) time.push("Proche !!")
+			else time.push(min)
 		}
 	}
-	if (res.length === 0) res.push("Indisponible")
+	if (time.length === 0) time.push("Indisponible")
+	res['time'] = time
+	res['stop'] = result[0].stop_name
+	res['direction'] = result[0].trip_headsign
+	res['icon'] = "mdi:numeric-3-box"
+	res['color'] = "rgba(203, 211, 0, 255)"
 	return (res)
-}
-
-function timeConvert(n) {
-	var num = n;
-	var hours = (num / 60);
-	var rhours = Math.floor(hours);
-	var minutes = (hours - rhours) * 60;
-	var rminutes = Math.round(minutes);
-	if (rhours != 0) return rhours + " heure(s) " + rminutes + " minutes";
-	else return rminutes + " minutes";
 }
 
 export { app }
