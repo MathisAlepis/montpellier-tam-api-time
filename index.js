@@ -3,6 +3,7 @@ import fetch from 'node-fetch';
 import express from 'express';
 import { parse } from 'csv-parse/sync';
 import { color } from './color.js'
+import { icon } from './icon.js'
 
 const app = express()
 const port = 3000
@@ -110,7 +111,7 @@ const parseCourseTam = async (result) => {
 	res['time'] = time
 	res['stop'] = result[0].stop_name
 	res['direction'] = result[0].trip_headsign
-	res['icon'] = "mdi:numeric-3-box"
+	res['icon'] = icon[result[0].route_short_name]
 	res['color'] = color[result[0].route_short_name]
 	return (res)
 }
