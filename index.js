@@ -94,7 +94,7 @@ const parseCourseTam = async (result) => {
 	if (result.length === 0) time.push("Indisponiblee")
 
 	else {
-		for (const course of result) {
+		for await (const course of result) {
 			let fullDateOfTimeCourse = new Date();
 			let [hours, minutes, seconds] = course.departure_time.split(':');
 			fullDateOfTimeCourse.setHours(+hours);
