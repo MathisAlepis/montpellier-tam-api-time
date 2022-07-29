@@ -40,6 +40,7 @@ app.get('/api/query/', async (req, res) => {
 	try {
 		result = await fetchAndFilterForTram(req.query)
 		parsedResult = await parseCourseTam(result)
+		if (parsedResult.time.length === 0) parsedResult.time.push("Indisponible")
 	} catch (error) {
 		res.json({
 			success: false,
@@ -91,26 +92,23 @@ const parseCourseTam = async (result) => {
 	// let now = new Date()
 	let now = addHours(2, new Date())
 
-	if (result.length === 0) time.push("Indisponiblee")
+	if (result.length === 0) time.push("Indisponible")
 
-	else {
-		for await (const course of result) {
-			let fullDateOfTimeCourse = new Date();
-			let [hours, minutes, seconds] = course.departure_time.split(':');
-			fullDateOfTimeCourse.setHours(+hours);
-			fullDateOfTimeCourse.setMinutes(minutes);
-			fullDateOfTimeCourse.setSeconds(seconds);
-			testtt.push(fullDateOfTimeCourse)
-			testtt.push(now)
+	else for (const course of result) {
+		let fullDateOfTimeCourse = new Date();
+		let [hours, minutes, seconds] = course.departure_time.split(':');
+		fullDateOfTimeCourse.setHours(+hours);
+		fullDateOfTimeCourse.setMinutes(minutes);
+		fullDateOfTimeCourse.setSeconds(seconds);
+		testtt.push(fullDateOfTimeCourse)
+		testtt.push(now)
 
-			if (fullDateOfTimeCourse > now) {
-				var diff = Math.abs(now - fullDateOfTimeCourse);
-				const min = (Math.floor((diff / 1000) / 60))
-				if (min <= 1) time.push("Proche !!")
-				else time.push(min)
-			}
+		if (fullDateOfTimeCourse > now) {
+			var diff = Math.abs(now - fullDateOfTimeCourse);
+			const min = (Math.floor((diff / 1000) / 60))
+			if (min <= 1) time.push("Proche !!")
+			else time.push(min)
 		}
-		if (time.length === 0) time.push("Indisponiblez")
 	}
 	res['time'] = time
 	res['stop'] = result[0].stop_name
