@@ -84,12 +84,12 @@ function addHours(numOfHours, date = new Date()) {
   }
 
 const parseCourseTam = async (result) => {
-let testtt = []
+	let testtt = []
 	let res = {}
 	let time = []
 	// HOTFIX : ajoute 2 heures car serveur en GMT 0
-	let now = new Date()
-	// let now = addHours(2, new Date())
+	// let now = new Date()
+	let now = addHours(2, new Date())
 
 	if (result.length === 0) time.push("Indisponible")
 
@@ -99,8 +99,8 @@ let testtt = []
 		fullDateOfTimeCourse.setHours(+hours);
 		fullDateOfTimeCourse.setMinutes(minutes);
 		fullDateOfTimeCourse.setSeconds(seconds);
-		test.push(fullDateOfTimeCourse)
-		test.push(now)
+		testtt.push(fullDateOfTimeCourse)
+		testtt.push(now)
 
 		if (fullDateOfTimeCourse > now) {
 			var diff = Math.abs(now - fullDateOfTimeCourse);
