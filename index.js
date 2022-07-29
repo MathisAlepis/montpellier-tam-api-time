@@ -40,7 +40,6 @@ app.get('/api/query/', async (req, res) => {
 	try {
 		result = await fetchAndFilterForTram(req.query)
 		parsedResult = await parseCourseTam(result)
-		if (parsedResult.time.length === 0) parsedResult.time.push("Indisponible")
 	} catch (error) {
 		res.json({
 			success: false,
@@ -95,7 +94,7 @@ const parseCourseTam = async (result) => {
 	if (result.length === 0) time.push("Indisponible")
 
 	else for (const course of result) {
-		let fullDateOfTimeCourse = new Date();
+		let fullDateOfTimeCourse = addHours(2, new Date());
 		let [hours, minutes, seconds] = course.departure_time.split(':');
 		fullDateOfTimeCourse.setHours(+hours);
 		fullDateOfTimeCourse.setMinutes(minutes);
@@ -110,6 +109,7 @@ const parseCourseTam = async (result) => {
 			else time.push(min)
 		}
 	}
+	if (time.length === 0) time.push("Indisponible")
 	res['time'] = time
 	res['stop'] = result[0].stop_name
 	res['direction'] = result[0].trip_headsign
