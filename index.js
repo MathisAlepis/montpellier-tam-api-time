@@ -91,7 +91,7 @@ const parseCourseTam = async (result) => {
 	// let now = new Date()
 	let now = addHours(2, new Date())
 
-	if (result.length === 0) time.push("Indisponible")
+	if (result.length === 0) time.push("Indisponiblee")
 
 	else for (const course of result) {
 		let fullDateOfTimeCourse = new Date();
