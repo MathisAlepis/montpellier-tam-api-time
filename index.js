@@ -84,12 +84,12 @@ function addHours(numOfHours, date = new Date()) {
   }
 
 const parseCourseTam = async (result) => {
-
+let test = []
 	let res = {}
 	let time = []
 	// HOTFIX : ajoute 2 heures car serveur en GMT 0
-	// let now = new Date()
-	let now = addHours(2, new Date())
+	let now = new Date()
+	// let now = addHours(2, new Date())
 
 	if (result.length === 0) time.push("Indisponible")
 
@@ -99,6 +99,8 @@ const parseCourseTam = async (result) => {
 		fullDateOfTimeCourse.setHours(+hours);
 		fullDateOfTimeCourse.setMinutes(minutes);
 		fullDateOfTimeCourse.setSeconds(seconds);
+		test.push(fullDateOfTimeCourse)
+		test.push(now)
 
 		if (fullDateOfTimeCourse > now) {
 			var diff = Math.abs(now - fullDateOfTimeCourse);
@@ -113,6 +115,7 @@ const parseCourseTam = async (result) => {
 	res['direction'] = result[0].trip_headsign
 	res['icon'] = icon[result[0].route_short_name]
 	res['color'] = color[result[0].route_short_name]
+	res["hhh"] = testtt
 	return (res)
 }
 
