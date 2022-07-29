@@ -79,7 +79,7 @@ const parseCourseTam = async (result) => {
 	let res = {}
 	let test = []
 	let time = []
-	let now = new Date
+	let now = Date.now()
 	now.toLocaleString("fr-FR", {timeZone: "Europe/Paris"})
 	if (result.length === 0) time.push("Indisponible")
 	else for (const course of result) {
