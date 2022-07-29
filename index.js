@@ -74,24 +74,29 @@ const fetchAndFilterForTram = async (filters) => {
 		Object.keys(filters).every(key => r[key] == filters[key].toUpperCase())
 	)
 }
+// HOTFIX : ajoute 2 heures car serveur en GMT 0
+function addHours(numOfHours, date = new Date()) {
+	date.setTime(date.getTime() + numOfHours * 60 * 60 * 1000);
+
+	return date;
+  }
 
 const parseCourseTam = async (result) => {
+
 	let res = {}
-	let test = []
 	let time = []
-	let now = Date.now()
-	now.toLocaleString("fr-FR", {timeZone: "Europe/Paris"})
+	// HOTFIX : ajoute 2 heures car serveur en GMT 0
+	// let now = new Date()
+	let now = addHours(2, new Date())
+
 	if (result.length === 0) time.push("Indisponible")
+
 	else for (const course of result) {
 		let fullDateOfTimeCourse = new Date();
 		let [hours, minutes, seconds] = course.departure_time.split(':');
 		fullDateOfTimeCourse.setHours(+hours);
 		fullDateOfTimeCourse.setMinutes(minutes);
 		fullDateOfTimeCourse.setSeconds(seconds);
-		fullDateOfTimeCourse.toLocaleString("fr-FR", {timeZone: "Europe/Paris"})
-
-		test.push(fullDateOfTimeCourse)
-		test.push(now)
 
 		if (fullDateOfTimeCourse > now) {
 			var diff = Math.abs(now - fullDateOfTimeCourse);
@@ -106,7 +111,6 @@ const parseCourseTam = async (result) => {
 	res['direction'] = result[0].trip_headsign
 	res['icon'] = "mdi:numeric-3-box"
 	res['color'] = "rgba(203, 211, 0, 255)"
-	res['test'] = test
 	return (res)
 }
 
