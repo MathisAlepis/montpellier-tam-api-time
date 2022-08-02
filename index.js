@@ -90,7 +90,7 @@ function addHours(numOfHours, date = new Date()) {
   }
 
 const parseCourseTam = async (result) => {
-	let fakenow = new Date("2022-08-02T23:44:48")
+	let fakenow = new Date("2022-08-02T21:44:48")
 	let res = {}
 	let time = []
 	// HOTFIX : ajoute 2 heures car serveur en GMT 0
