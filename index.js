@@ -4,7 +4,7 @@ import express from 'express';
 import { parse } from 'csv-parse/sync';
 import { color } from './color.js'
 import { icon } from './icon.js'
-
+import { test } from './test.js'
 const app = express()
 const port = 3000
 const TAM_DATA_ENDPOINT = "http://data.montpellier3m.fr/sites/default/files/ressources/TAM_MMM_TpsReel.csv"
@@ -90,24 +90,24 @@ function addHours(numOfHours, date = new Date()) {
   }
 
 const parseCourseTam = async (result) => {
+	let fakenow = new Date("2022-08-02T23:44:48")
 	let res = {}
 	let time = []
 	// HOTFIX : ajoute 2 heures car serveur en GMT 0
 	// let now = new Date()
-	let now = addHours(2, new Date())
-	let test = []
-
-	if (result.length === 0) time.push("Indisponible")
-
-	else for (const course of result) {
+	let now = addHours(2, fakenow)
+	let testee = []
+	// if (result.length === 0) time.push("Indisponible")
+	// else for (const course of result) {
+	for(const course of test) {
 		// HOTFIX : ajoute 2 heures car serveur en GMT 0
-		let fullDateOfTimeCourse = addHours(2, new Date());
+		let fullDateOfTimeCourse = addHours(2, new Date(fakenow));
 		let [hours, minutes, seconds] = course.departure_time.split(':');
 		fullDateOfTimeCourse.setHours(+hours);
 		fullDateOfTimeCourse.setMinutes(minutes);
 		fullDateOfTimeCourse.setSeconds(seconds);
-		test.push(fullDateOfTimeCourse)
-		test.push(now)
+		testee.push(now)
+		testee.push(fullDateOfTimeCourse)
 		if (fullDateOfTimeCourse > now) {
 			var diff = Math.abs(now - fullDateOfTimeCourse);
 			const min = (Math.floor((diff / 1000) / 60))
@@ -116,13 +116,19 @@ const parseCourseTam = async (result) => {
 		}
 	}
 	if (time.length === 0) time.push("Indisponible")
+	// res['time'] = time
+	// res['stop'] = result[0].stop_name
+	// res['direction'] = result[0].trip_headsign
+	// res['icon'] = icon[result[0].route_short_name]
+	// res['color'] = color[result[0].route_short_name]
+	// res['testee'] = testee
+	// res['now'] = [new Date(), Date.now()]
 	res['time'] = time
-	res['stop'] = result[0].stop_name
-	res['direction'] = result[0].trip_headsign
-	res['icon'] = icon[result[0].route_short_name]
-	res['color'] = color[result[0].route_short_name]
-	res['test'] = test
-	res['now'] = [new Date(), Date.now()]
+	res['stop'] = test[0].stop_name
+	res['direction'] = test[0].trip_headsign
+	res['icon'] = icon[test[0].route_short_name]
+	res['color'] = color[test[0].route_short_name]
+	res['testee'] = testee
 	return (res)
 }
 
