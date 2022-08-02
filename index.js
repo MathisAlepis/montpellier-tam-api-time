@@ -106,7 +106,6 @@ const parseCourseTam = async (result) => {
 		fullDateOfTimeCourse.setHours(+hours);
 		fullDateOfTimeCourse.setMinutes(minutes);
 		fullDateOfTimeCourse.setSeconds(seconds);
-		fullDateOfTimeCourse = addHours(2, fullDateOfTimeCourse);
 		test.push(fullDateOfTimeCourse)
 		test.push(now)
 		if (fullDateOfTimeCourse > now) {
@@ -123,6 +122,7 @@ const parseCourseTam = async (result) => {
 	res['icon'] = icon[result[0].route_short_name]
 	res['color'] = color[result[0].route_short_name]
 	res['test'] = test
+	res['now'] = [new Date(), Date.now()]
 	return (res)
 }
 
