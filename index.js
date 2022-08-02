@@ -44,7 +44,7 @@ app.get('/api/query/', async (req, res) => {
 
 	try {
 		result = await fetchAndFilterForTram(req.query)
-		parsedResult = await parseCourseTam(result)
+		parsedResult = await parseCourseTam(result, req.query)
 	} catch (error) {
 		res.json({
 			success: false,
@@ -88,7 +88,7 @@ function addHours(numOfHours, date = new Date()) {
 	return date;
   }
 
-const parseCourseTam = async (result) => {
+const parseCourseTam = async (result, query) => {
 	let res = {}
 	let time = []
 
@@ -97,8 +97,13 @@ const parseCourseTam = async (result) => {
 	let now = addHours(2, new Date())
 
 	let test = []
-
-	if (result.length === 0) res['time'] = ["Fin de service"]
+	if (result.length === 0) {
+		res['time'] = ["Fin de service"]
+		res['stop'] = query.stop_name
+		res['direction'] = query.trip_headsign
+		res['icon'] = icon[0]
+		res['color'] = color[0]
+	}
 
 	else {
 		for (const course of result) {
