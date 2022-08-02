@@ -95,11 +95,11 @@ const parseCourseTam = async (result) => {
 	// HOTFIX : ajoute 2 heures car serveur en GMT 0
 	// let now = new Date()
 	let now = addHours(2, new Date())
+	let test = []
 
 	if (result.length === 0) time.push("Indisponible")
 
 	else for (const course of result) {
-		let test = []
 		// HOTFIX : ajoute 2 heures car serveur en GMT 0
 		let fullDateOfTimeCourse = new Date();
 		let [hours, minutes, seconds] = course.departure_time.split(':');
