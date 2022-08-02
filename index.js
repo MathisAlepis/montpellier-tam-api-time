@@ -101,7 +101,7 @@ const parseCourseTam = async (result) => {
 
 	else for (const course of result) {
 		// HOTFIX : ajoute 2 heures car serveur en GMT 0
-		let fullDateOfTimeCourse = new Date();
+		let fullDateOfTimeCourse = addHours(2, new Date());
 		let [hours, minutes, seconds] = course.departure_time.split(':');
 		fullDateOfTimeCourse.setHours(+hours);
 		fullDateOfTimeCourse.setMinutes(minutes);
