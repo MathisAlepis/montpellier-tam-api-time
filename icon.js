@@ -1,5 +1,5 @@
 export const icon = {
-	0: "mdi:bus-clock",
+	0: "mdi:bus-alert",
 	1: "mdi:numeric-1-box",
 	2: "mdi:numeric-2-box",
 	3: "mdi:numeric-3-box",
