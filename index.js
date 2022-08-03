@@ -108,7 +108,7 @@ const parseCourseTam = async (result, query) => {
 		for (const course of result) {
 			let fullDateOfTimeCourse = moment(new Date()).tz("Europe/Paris")
 			let [hours, minutes, seconds] = course.departure_time.split(':');
-			if ((hours >= "00" && hours <= "05") && now.hour() != "00") fullDateOfTimeCourse.add(1, 'days');
+			if ((hours >= "00" && hours <= "03") && (now.hour() > "21" && now.hour() < "00")) fullDateOfTimeCourse.add(1, 'days');
 			fullDateOfTimeCourse.set({hour:hours,minute:minutes,second:seconds})
 			test.push(now.toString())
 			test.push(fullDateOfTimeCourse.toString())
