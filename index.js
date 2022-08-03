@@ -119,7 +119,7 @@ const parseCourseTam = async (result, query) => {
 			}
 		}
 		if (time.length === 0) time.push("Indisponible")
-		res['time'] = time
+		res['time'] = time.sort().reverse();
 		res['stop'] = result[0].stop_name
 		res['direction'] = result[0].trip_headsign
 		res['icon'] = icon[result[0].route_short_name]
