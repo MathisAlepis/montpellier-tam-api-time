@@ -4,6 +4,8 @@ import express from 'express';
 import { parse } from 'csv-parse/sync';
 import { color } from './color.js'
 import { icon } from './icon.js'
+import moment from 'moment-timezone';
+
 const app = express()
 const port = 3000
 const TAM_DATA_ENDPOINT = "http://data.montpellier3m.fr/sites/default/files/ressources/TAM_MMM_TpsReel.csv"
@@ -91,12 +93,9 @@ function addHours(numOfHours, date = new Date()) {
 const parseCourseTam = async (result, query) => {
 	let res = {}
 	let time = []
-
-	// HOTFIX : ajoute 2 heures car serveur en GMT 0
-	// let now = new Date()
-	let now = addHours(2, new Date())
-
 	let test = []
+	let now = moment(new Date()).tz("Europe/Paris")
+
 	if (result.length === 0) {
 		res['time'] = ["Fin de service"]
 		res['stop'] = query.stop_name
@@ -107,18 +106,14 @@ const parseCourseTam = async (result, query) => {
 
 	else {
 		for (const course of result) {
-			// HOTFIX : ajoute 2 heures car serveur en GMT 0
-			let fullDateOfTimeCourse = addHours(2, new Date());
+			let fullDateOfTimeCourse = moment(new Date()).tz("Europe/Paris")
 			let [hours, minutes, seconds] = course.departure_time.split(':');
-			fullDateOfTimeCourse.setHours(+hours);
-			fullDateOfTimeCourse.setMinutes(minutes);
-			fullDateOfTimeCourse.setSeconds(seconds);
-			fullDateOfTimeCourse = addHours(2, fullDateOfTimeCourse);
-			test.push(now)
-			test.push(fullDateOfTimeCourse)
+			if ((hours >= "00" && hours <= "05") && now.hour() != "00") fullDateOfTimeCourse.add(1, 'days');
+			fullDateOfTimeCourse.set({hour:hours,minute:minutes,second:seconds})
+			test.push(now.toString())
+			test.push(fullDateOfTimeCourse.toString())
 			if (fullDateOfTimeCourse > now) {
-				var diff = Math.abs(now - fullDateOfTimeCourse);
-				const min = (Math.floor((diff / 1000) / 60))
+				let min = fullDateOfTimeCourse.diff(now, 'minutes');
 				if (min <= 1) time.push("Proche !!")
 				else time.push(min)
 			}
@@ -130,7 +125,6 @@ const parseCourseTam = async (result, query) => {
 		res['icon'] = icon[result[0].route_short_name]
 		res['color'] = color[result[0].route_short_name]
 		res['test'] = test
-		res['oooo'] = new Date()
 	}
 	return (res)
 }
