@@ -93,7 +93,6 @@ function addHours(numOfHours, date = new Date()) {
 const parseCourseTam = async (result, query) => {
 	let res = {}
 	let time = []
-	let test = []
 	let now = moment(new Date()).tz("Europe/Paris")
 
 	if (result.length === 0) {
@@ -108,23 +107,30 @@ const parseCourseTam = async (result, query) => {
 		for (const course of result) {
 			let fullDateOfTimeCourse = moment(new Date()).tz("Europe/Paris")
 			let [hours, minutes, seconds] = course.departure_time.split(':');
-			if ((hours >= "00" && hours <= "03") && (now.hour() > "21" && now.hour() < "00")) fullDateOfTimeCourse.add(1, 'days');
+			if ((hours >= "00" && hours <= "03") && (now.hour() == "22" || now.hour() == "23" )) fullDateOfTimeCourse.add(1, 'days');
 			fullDateOfTimeCourse.set({hour:hours,minute:minutes,second:seconds})
-			test.push(now.toString())
-			test.push(fullDateOfTimeCourse.toString())
 			if (fullDateOfTimeCourse > now) {
 				let min = fullDateOfTimeCourse.diff(now, 'minutes');
-				if (min <= 1) time.push("Proche !!")
-				else time.push(min)
+				time.push(min)
 			}
 		}
-		if (time.length === 0) time.push("Indisponible")
-		res['time'] = time.sort().reverse();
+		if (time.length === 0) {
+			time.push("Indisponible")
+			res['time'] = time
+		}
+		else {
+			let sortedTime = time.sort(function(a, b){return a - b});
+			for (let i = 0; i < sortedTime.length; i++) {
+				if (sortedTime[i] < "2") {
+					sortedTime[i] = 'Proche !!';
+				}
+			  }
+			res['time'] = sortedTime
+		}
 		res['stop'] = result[0].stop_name
 		res['direction'] = result[0].trip_headsign
 		res['icon'] = icon[result[0].route_short_name]
 		res['color'] = color[result[0].route_short_name]
-		res['test'] = test
 	}
 	return (res)
 }
