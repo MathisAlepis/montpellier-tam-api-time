@@ -68,7 +68,17 @@ const fetchAndFilterAllCourses = async () => {
 		skip_empty_lines: true,
 		delimiter: ';',
 	})
-	let allCourses = records.map(o => ({ stop_name: o.stop_name, trip_headsign: o.trip_headsign }))
+	let allCourses = records.map(o => ({ stop_name: o.stop_name, trip_headsign: o.trip_headsign, direction_id: o.direction_id }))
+	for (let index = 0; index < allCourses.length; index++) {
+		if (allCourses[index].trip_headsign === "GARCIA LORCA") {
+			if (allCourses[index].direction_id === "1") {
+				allCourses[index].trip_headsign = "GARCIA LORCA SENS A"
+			} else {
+				allCourses[index].trip_headsign = "GARCIA LORCA SENS B"
+			}
+		}
+		delete allCourses[index].direction_id
+	}
 	return allCourses.filter((v, i, a) => a.findIndex(v2 => ['stop_name', 'trip_headsign'].every(k => v2[k] === v[k])) === i)
 }
 
@@ -79,16 +89,19 @@ const fetchAndFilterForTram = async (filters) => {
 		skip_empty_lines: true,
 		delimiter: ';',
 	})
+	for (let index = 0; index < records.length; index++) {
+		if (records[index].trip_headsign === "GARCIA LORCA") {
+			if (records[index].direction_id === "0") {
+				records[index].trip_headsign = "GARCIA LORCA SENS A"
+			} else {
+				records[index].trip_headsign = "GARCIA LORCA SENS B"
+			}
+		}
+	}
 	return records.filter(r =>
 		Object.keys(filters).every(key => r[key] == filters[key].toUpperCase())
 	)
 }
-// HOTFIX : ajoute 2 heures car serveur en GMT 0
-function addHours(numOfHours, date = new Date()) {
-	date.setTime(date.getTime() + numOfHours * 60 * 60 * 1000);
-
-	return date;
-  }
 
 const parseCourseTam = async (result, query) => {
 	let res = {}
