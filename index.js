@@ -1,7 +1,6 @@
 
 import fetch from 'node-fetch';
 import express from 'express';
-import { parse } from 'csv-parse/sync';
 import { color } from './color.js'
 import { icon } from './icon.js'
 import moment from 'moment-timezone';
@@ -61,13 +60,24 @@ app.get('/api/query/', async (req, res) => {
 
 })
 
+function parseCSV(str, delimiter = ";") {
+  const headers = str.slice(0, str.indexOf("\n")).trim().split(delimiter);
+  const rows = str.slice(str.indexOf("\n") + 1).trim().split(/\r\n|\n|\r/);
+
+  const arr = rows.map(function (row) {
+    const values = row.split(delimiter);
+    const el = headers.reduce(function (object, header, index) {
+      object[header] = values[index];
+      return object;
+    }, {});
+    return el;
+  });
+  return arr;
+}
+
 const fetchAndFilterAllCourses = async () => {
 	const tamCSV = await (await fetch(TAM_DATA_ENDPOINT)).text()
-	const records = parse(tamCSV, {
-		columns: true,
-		skip_empty_lines: true,
-		delimiter: ';',
-	})
+	const records = parseCSV(tamCSV)
 	let allCourses = records.map(o => ({ stop_name: o.stop_name, trip_headsign: o.trip_headsign, direction_id: o.direction_id }))
 	for (let index = 0; index < allCourses.length; index++) {
 		if (allCourses[index].trip_headsign === "GARCIA LORCA") {
@@ -84,11 +94,7 @@ const fetchAndFilterAllCourses = async () => {
 
 const fetchAndFilterForTram = async (filters) => {
 	const tamCSV = await (await fetch(TAM_DATA_ENDPOINT)).text()
-	const records = parse(tamCSV, {
-		columns: true,
-		skip_empty_lines: true,
-		delimiter: ';',
-	})
+	const records = parseCSV(tamCSV)
 	for (let index = 0; index < records.length; index++) {
 		if (records[index].trip_headsign === "GARCIA LORCA") {
 			if (records[index].direction_id === "0") {
